@@ -1,15 +1,15 @@
 -- =============================================
 -- QUESTION 1: Converting to First Normal Form (1NF)
 -- =============================================
--- Problem: Products column contains multiple values (violates atomicity rule of 1NF)
--- Solution: Split into rows with one product per order line
 
+-- Create original table
 CREATE TABLE ProductDetail (
     OrderID INT,
     CustomerName VARCHAR(100),
     Products VARCHAR(100) 
 );
 
+-- Insert the sample data 
 INSERT INTO ProductDetail (OrderID, CustomerName, Products)
 VALUES 
     (101, 'John Doe', 'Laptop'),
@@ -23,13 +23,11 @@ VALUES
 -- =============================================
 -- QUESTION 2: Converting to Second Normal Form (2NF)
 -- =============================================
--- Problem: CustomerName depends only on OrderID (partial dependency)
--- Solution: Split into two tables to remove partial dependencies
 
 -- Step 1: Create Orders table 
 CREATE TABLE Orders (
-    OrderID INT PRIMARY KEY,
-    CustomerName VARCHAR(100)
+    OrderID INT PRIMARY KEY,      --Primary key for order header
+    CustomerName VARCHAR(100)     --Customer data depends only on OrderID
 );
 
 INSERT INTO Orders (OrderID, CustomerName)
@@ -47,7 +45,7 @@ CREATE TABLE Product (
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
 );
 
-
+-- Insert normalized order items with quantities
 INSERT INTO Product (OrderID, Product, Quantity)
 VALUES
 (101, 'Laptop', 2),
